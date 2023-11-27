@@ -20,6 +20,6 @@ svar = 0
 while svar < 1 or svar > 12:
     svar = int(input("Skriv in månadsnummer: "))
 
-arr = ["Januari", "Febuari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "Septemper", "Oktober", "November", "December"]
+arr = ["Januari", "Febuari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"]
 
 print(arr[svar - 1])
