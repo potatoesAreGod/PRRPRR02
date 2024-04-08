@@ -115,6 +115,16 @@ class EmployeeManager
     public void ViewAllEmployees()
     {
         Console.Clear();
+
+        // Make sure we have employees to show
+        if (employees.Count == 0)
+        {
+            Console.WriteLine("No employees saved");
+            Console.WriteLine("Press any key to return to menu");
+            Console.ReadKey();
+            return;
+        }
+
         Console.WriteLine("All Employees:");
 
         // Loop through all employees
@@ -139,6 +149,16 @@ class EmployeeManager
     public void ViewPayouts()
     {
         Console.Clear();
+
+        // Make sure we have employees to calculate salaries for
+        if (employees.Count == 0)
+        {
+            Console.WriteLine("No employees saved");
+            Console.WriteLine("Press any key to return to menu");
+            Console.ReadKey();
+            return;
+        }
+
         Console.WriteLine("Payouts:");
 
         double totalPay = 0;
@@ -160,8 +180,7 @@ class EmployeeManager
             totalPay += employee.CalculateSalary();
         }
         // Write out total pay for all employees
-        Console.WriteLine("Total pay: {0}", totalPay);
-
+        Console.WriteLine("\nTotal pay: {0}", totalPay);
         Console.WriteLine("Press any key to return to menu");
         Console.ReadKey();
     }
