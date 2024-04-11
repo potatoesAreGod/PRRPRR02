@@ -81,6 +81,11 @@ class EmployeeManager
                     Console.WriteLine("Salesman registered successfully.");
                     Console.WriteLine("Press any key to return to menu");
                     Console.ReadKey();
+                } else
+                {
+                    Console.WriteLine("Invalid amount of sales or provision.");
+                    Console.WriteLine("Press any key to return to menu");
+                    Console.ReadKey();
                 }
                 break;
             case "2":
@@ -92,6 +97,11 @@ class EmployeeManager
                     Console.WriteLine("Consultant registered successfully.");
                     Console.WriteLine("Press any key to return to menu");
                     Console.ReadKey();
+                } else
+                {
+                    Console.WriteLine("Invalid number of worked hours or wage.");
+                    Console.WriteLine("Press any key to return to menu");
+                    Console.ReadKey();
                 }
                 break;
             case "3":
@@ -100,6 +110,11 @@ class EmployeeManager
                 {
                     employees.Add(new Clerk(name, monthlySalary));
                     Console.WriteLine("Clerk registered successfully.");
+                    Console.WriteLine("Press any key to return to menu");
+                    Console.ReadKey();
+                } else
+                {
+                    Console.WriteLine("Invalid salary.");
                     Console.WriteLine("Press any key to return to menu");
                     Console.ReadKey();
                 }
