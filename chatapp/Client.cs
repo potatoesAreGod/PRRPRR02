@@ -8,43 +8,79 @@ namespace chatapp
         public static void Start()
         {
             Console.Clear();
-            Console.Write("Enter server IP: ");
-            string serverIp = Console.ReadLine();
 
+            // Ask for server ip
+            Console.Write("Enter server IP: ");
+            string serverIp = Console.ReadLine().Trim();
+            while (string.IsNullOrWhiteSpace(serverIp))
+            {
+                Console.WriteLine("Please enter a valid ip");
+                Console.Write("Enter server IP: ");
+                serverIp = Console.ReadLine().Trim();
+            }
+
+            // Ask for server port
+            Console.Write("Enter port for server (8888): ");
+            string input = Console.ReadLine().Trim();
+
+            // Apply default of 8888 if input is invalid
+            int port = int.TryParse(input, out port) ? 8888 : port;
+
+            // Create a client object for creating TCP connections
             TcpClient client = new();
             try
             {
-                Console.WriteLine("Connecting to server...");
-                client.Connect(serverIp, 8888);
-                Console.WriteLine("Connected to server.");
+                Console.WriteLine("Connecting to {0}:{1}...", serverIp, port);
 
+                // Try connecting to the server
+                client.Connect(serverIp, port);
+                Console.WriteLine("Connected to {0}:{1}", serverIp, port);
+
+                // Opens a stream for sending/reading data from the server
                 NetworkStream stream = client.GetStream();
 
+                // Create a new thread so we can read and write at the same time
                 Thread receiveThread = new(() =>
                 {
                     while (true)
                     {
+                        // Max size for recived messages
                         byte[] buffer = new byte[1024];
+
+                        // Read data from server
                         int bytesRead = stream.Read(buffer, 0, buffer.Length);
+
+                        // If we don't recieve any data the connection must be dead
                         if (bytesRead == 0)
                         {
                             Console.WriteLine("The server closed the connection.");
                             break;
                         }
+
+                        // Convert recived data to human readable text and write to console
                         string message = Encoding.Unicode.GetString(buffer, 0, bytesRead);
                         Console.WriteLine(message);
                     }
                 });
+                // Start the thread
                 receiveThread.Start();
 
                 while (true)
                 {
                     Console.Write("> ");
                     string message = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(message))
+
+                    // Ensure we have a message to send and
+                    // ensure length is less than 256 to avoid overflows
+                    // as some characters are up to 4 bytes and client buffer is 1024
+                    if (!string.IsNullOrEmpty(message) && message.Length <= 256)
                     {
+                        // Convert message to bytecode and send
                         byte[] buffer = Encoding.Unicode.GetBytes(message);
                         stream.Write(buffer, 0, buffer.Length);
+                    } else if (message.Length > 256)
+                    {
+                        Console.WriteLine("Error: Message is too long");
                     }
                 }
             }
@@ -52,6 +88,7 @@ namespace chatapp
             {
                 Console.WriteLine("Error: {0}", ex.Message);
             }
+            // Close TCP client before exiting
             finally
             {
                 client.Close();
