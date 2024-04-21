@@ -12,21 +12,32 @@ namespace chatapp
         public static void Start()
         {
             Console.Clear();
+            int defaultPort = 8888;
+            int port = 0;
             TcpListener server = null;
             try
             {
                 // Start a server
-                Console.Write("Enter port for server (8888): ");
+                Console.Write("Enter port for server ({0}): ", defaultPort);
+                string input = Console.ReadLine().Trim();
+                if (int.TryParse(input, out int userPort))
+                {
+                    if (userPort < 65535 && userPort! < 0)
+                    {
+                        Console.WriteLine("Port must be in range of 1-65535");
+                        return;
+                    }
+                    port = userPort;
+                } else
+                {
+                    Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
+                    port = defaultPort;
+                }
 
-                //string inputPath = Console.ReadLine().Trim();
-                //string filePath = string.IsNullOrWhiteSpace(inputPath) ? defaultSavePath : inputPath;
-
-
-
-                server = new TcpListener(IPAddress.Any, 8888);
+                server = new TcpListener(IPAddress.Any, port);
                 server.Start();
 
-                Console.WriteLine("Server is running. Listening on port 8888");
+                Console.WriteLine("Server is running. Listening on port {0}", port);
 
                 while (true)
                 {
