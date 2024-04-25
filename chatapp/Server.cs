@@ -26,12 +26,14 @@ namespace chatapp
                 // Apply a default of 8888 if user specifed port is invalid
                 if (int.TryParse(input, out int userPort))
                 {
-                    if (userPort < 65535 && userPort! < 0)
+                    if (userPort > 65535 || userPort < 0)
                     {
-                        Console.WriteLine("Port must be in range of 1-65535");
-                        return;
+                        Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
+                        port = defaultPort;
+                    } else
+                    {
+                        port = userPort;
                     }
-                    port = userPort;
                 } else
                 {
                     Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);

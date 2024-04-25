@@ -16,7 +16,7 @@ namespace chatapp
             string serverIp = Console.ReadLine().Trim();
             while (string.IsNullOrWhiteSpace(serverIp))
             {
-                Console.WriteLine("Please enter a valid ip");
+                Console.WriteLine("Please enter a valid address");
                 Console.Write("Enter server IP: ");
                 serverIp = Console.ReadLine().Trim();
             }
@@ -28,12 +28,15 @@ namespace chatapp
             // Apply a default of 8888 if user specifed port is invalid
             if (int.TryParse(input, out int userPort))
             {
-                if (userPort < 65535 && userPort! < 0)
+                if (userPort > 65535 || userPort < 0)
                 {
-                    Console.WriteLine("Port must be in range of 1-65535");
-                    return;
+                    Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
+                    port = defaultPort;
                 }
-                port = userPort;
+                else
+                {
+                    port = userPort;
+                }
             }
             else
             {
@@ -54,7 +57,7 @@ namespace chatapp
                 // Opens a stream for sending/reading data from the server
                 NetworkStream stream = client.GetStream();
 
-                // Create a new thread so we can read and write at the same time
+                // Create a new thread so we can read/write at the same time
                 Thread receiveThread = new(() =>
                 {
                     while (true)

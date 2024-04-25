@@ -9,6 +9,7 @@ class Program
         Console.WriteLine("Choose mode:");
         Console.WriteLine("1. Server");
         Console.WriteLine("2. Client");
+        Console.WriteLine("3. Exit");
 
         while (true)
         {
@@ -19,6 +20,9 @@ class Program
                     break;
                 case "2":
                     Client.Start();
+                    break;
+                case "3":
+                    Environment.Exit(0);
                     break;
                 default:
                     Console.WriteLine("Invalid option.");
