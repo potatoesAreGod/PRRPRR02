@@ -5,7 +5,7 @@ class Program
     static void Main()
     {
         // Display a main menu
-        Console.WriteLine("Chat program 101");
+        Console.WriteLine("Chat program");
         Console.WriteLine("Choose mode:");
         Console.WriteLine("1. Server");
         Console.WriteLine("2. Client");

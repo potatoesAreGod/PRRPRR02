@@ -8,6 +8,8 @@ namespace chatapp
         public static void Start()
         {
             Console.Clear();
+            int defaultPort = 8888;
+            int port = 0;
 
             // Ask for server ip
             Console.Write("Enter server IP: ");
@@ -20,11 +22,24 @@ namespace chatapp
             }
 
             // Ask for server port
-            Console.Write("Enter port for server (8888): ");
+            Console.Write("Enter port for server ({0}): ", defaultPort);
             string input = Console.ReadLine().Trim();
 
-            // Apply default of 8888 if input is invalid
-            int port = int.TryParse(input, out port) ? 8888 : port;
+            // Apply a default of 8888 if user specifed port is invalid
+            if (int.TryParse(input, out int userPort))
+            {
+                if (userPort < 65535 && userPort! < 0)
+                {
+                    Console.WriteLine("Port must be in range of 1-65535");
+                    return;
+                }
+                port = userPort;
+            }
+            else
+            {
+                Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
+                port = defaultPort;
+            }
 
             // Create a client object for creating TCP connections
             TcpClient client = new();
@@ -67,12 +82,10 @@ namespace chatapp
 
                 while (true)
                 {
-                    Console.Write("> ");
                     string message = Console.ReadLine();
 
                     // Ensure we have a message to send and
                     // ensure length is less than 256 to avoid overflows
-                    // as some characters are up to 4 bytes and client buffer is 1024
                     if (!string.IsNullOrEmpty(message) && message.Length <= 256)
                     {
                         // Convert message to bytecode and send
@@ -84,6 +97,7 @@ namespace chatapp
                     }
                 }
             }
+            // Catch exceptions
             catch (Exception ex)
             {
                 Console.WriteLine("Error: {0}", ex.Message);
