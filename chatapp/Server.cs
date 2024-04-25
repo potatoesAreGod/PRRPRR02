@@ -12,6 +12,8 @@ namespace chatapp
         public static void Start()
         {
             Console.Clear();
+
+            // Apply default of 8888 if input is invalid
             int defaultPort = 8888;
             int port = 0;
 
@@ -40,7 +42,6 @@ namespace chatapp
                     port = defaultPort;
                 }
 
-                // Start the server on specified port
                 server = new TcpListener(IPAddress.Any, port);
                 server.Start();
                 Console.WriteLine("Server is running. Listening on port {0}", port);

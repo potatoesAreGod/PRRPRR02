@@ -25,31 +25,14 @@ namespace chatapp
             Console.Write("Enter port for server ({0}): ", defaultPort);
             string input = Console.ReadLine().Trim();
 
-            // Apply a default of 8888 if user specifed port is invalid
-            if (int.TryParse(input, out int userPort))
-            {
-                if (userPort > 65535 || userPort < 0)
-                {
-                    Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
-                    port = defaultPort;
-                }
-                else
-                {
-                    port = userPort;
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid port. Applying default of {0}", defaultPort);
-                port = defaultPort;
-            }
+            // Apply default of 8888 if input is invalid
+            int port = int.TryParse(input, out port) ? 8888 : port;
 
             // Create a client object for creating TCP connections
             TcpClient client = new();
             try
             {
                 Console.WriteLine("Connecting to {0}:{1}...", serverIp, port);
-
                 // Try connecting to the server
                 client.Connect(serverIp, port);
                 Console.WriteLine("Connected to {0}:{1}", serverIp, port);
@@ -94,7 +77,8 @@ namespace chatapp
                         // Convert message to bytecode and send
                         byte[] buffer = Encoding.Unicode.GetBytes(message);
                         stream.Write(buffer, 0, buffer.Length);
-                    } else if (message.Length > 256)
+                    }
+                    else if (message.Length > 256)
                     {
                         Console.WriteLine("Error: Message is too long");
                     }
@@ -110,6 +94,7 @@ namespace chatapp
             {
                 client.Close();
             }
+
         }
     }
 }
